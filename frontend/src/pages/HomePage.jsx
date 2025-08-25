@@ -1,18 +1,11 @@
 import React, { use, useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
 import toast from 'react-hot-toast';
+import {rateLimitError} from '../lib/utility.js';
 import axios from 'axios'; 
 import NoteCard from '../components/NoteCard';
-import Note from '../../../backend/src/model/Note';
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(false);
-  const rateLimitError = ()=>  toast.error("You are rate limited. Please try again later.");
-  const handleRateLimit = () => {
-    setIsRateLimited(true);
-    rateLimitError();
-  };
-
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -23,10 +16,9 @@ const HomePage = () => {
         setNotes(res.data);
         console.log("Fetched notes: ", res.data);
         setIsLoading(false);
-        setIsRateLimited(false);
       } catch(error){
         if (error.response?.status === 429) {
-          handleRateLimit();
+          rateLimitError();
           return;
         } else{
           toast.error("Failed to fetch notes. Please try again later.");
