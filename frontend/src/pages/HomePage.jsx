@@ -2,6 +2,8 @@ import React, { use, useEffect, useState } from 'react';
 import NavBar from '../components/NavBar';
 import toast from 'react-hot-toast';
 import axios from 'axios'; 
+import NoteCard from '../components/NoteCard';
+import Note from '../../../backend/src/model/Note';
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -45,9 +47,9 @@ const HomePage = () => {
         {isLoading && <div className='text-center mt-10 text-lg'>Loading...</div>}
         {!isLoading && notes.length === 0 && <div className='text-center text-primary'> No Notes to show</div>}
         {!isLoading && notes.length > 0 && (
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4'>
             {notes.map((note) => (
-              <div>{note.title} | {note.body} </div>
+              <NoteCard key={note._id} note={note} />
             ))}
           </div>)
         }

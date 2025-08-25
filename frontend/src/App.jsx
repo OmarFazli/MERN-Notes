@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 const App = () => {
   return (
-    <div data-theme="dark">
+    <div data-theme="dark" className='bg bg-base-300'>
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/create" element={<CreatePage/>}/>
