@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { ArrowLeftIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { set } from 'mongoose'
@@ -11,6 +11,7 @@ const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,16 +25,17 @@ const CreatePage = () => {
       const res = await axios.post('http://localhost:3000/api/notes', {title, body});
       if (res.status === 201){
         toast.success("Note created successfully");
-        //setTitle("");
-        //setBody("");
+        setTitle("");
+        setBody("");
         setIsLoading(false);
+        navigate("/");
       }
     } catch(error){
       if (error.response?.status === 429) {
         rateLimitError();
         return;
       } else{
-        toast.error("Failed to fetch notes. Please try again later.");
+        toast.error("Failed to create note.");
       }
     } finally {
       setIsLoading(false);
