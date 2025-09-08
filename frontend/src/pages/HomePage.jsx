@@ -16,7 +16,6 @@ const HomePage = () => {
       try{
         const res = await api.get('/notes');
         setNotes(res.data);
-        console.log("Fetched notes: ", res.data);
         setIsLoading(false);
       } catch(error){
         if (error.response?.status === 429) {
