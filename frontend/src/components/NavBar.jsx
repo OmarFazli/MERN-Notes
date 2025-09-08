@@ -1,4 +1,4 @@
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon , ToggleLeft, ToggleRight} from 'lucide-react'
 import { Link } from 'react-router'
 import React from 'react'
 
@@ -13,6 +13,11 @@ const NavBar = () => {
                         <PlusIcon className='size-7'></PlusIcon>
                         <span>Create Note</span>
                     </Link>
+                    <div>
+                        <button>
+                            <ToggleLeft className="size-10" />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

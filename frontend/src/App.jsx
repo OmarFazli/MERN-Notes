@@ -6,6 +6,7 @@ import NoteDetailsPage from './pages/NoteDetailsPage'
 import toast from 'react-hot-toast'
 
 const App = () => {
+  
   return (
     <div data-theme="dark" className='bg bg-base-300'>
       <Routes>

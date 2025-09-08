@@ -6,7 +6,7 @@ import api from '../lib/axios.js'
 import toast from 'react-hot-toast'
 import { rateLimitError } from '../lib/utility.js'
 
-const NoteCard = ({note}) => {
+const NoteCard = ({note, onDelete}) => {
     const handleDelete = async (e, id) => {
         e.preventDefault();
         
@@ -17,9 +17,7 @@ const NoteCard = ({note}) => {
             const res = await api.delete(`/notes/${id}`);
             if (res.status === 200){
                 toast.success("Note deleted successfully");
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000); // 1 second
+                onDelete(); // Refresh notes on parent component
             }
         } catch(error){
             if (error.response?.status === 429) {
@@ -28,9 +26,7 @@ const NoteCard = ({note}) => {
             }
             else if (error.response?.status === 404){
                 toast.error("Note not found. It might have been already deleted.");
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000); // 1 second
+                onDelete(); // Refresh notes on parent component
                 return;
             }
             toast.error("Failed to delete note. Please try again later.");

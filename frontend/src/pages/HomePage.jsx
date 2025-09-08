@@ -4,15 +4,17 @@ import toast from 'react-hot-toast';
 import {rateLimitError} from '../lib/utility.js';
 import axios from 'axios'; 
 import NoteCard from '../components/NoteCard';
+import api from '../lib/axios.js';
 
 const HomePage = () => {
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchNotes = async () => {
+  const refreshNotes = async () => {
+      setNotes([]);
+      setIsLoading(true);
       try{
-        const res = await axios.get('http://localhost:3000/api/notes');
+        const res = await api.get('/notes');
         setNotes(res.data);
         console.log("Fetched notes: ", res.data);
         setIsLoading(false);
@@ -26,9 +28,9 @@ const HomePage = () => {
       } finally {
         setIsLoading(false);
       }
-    };
-
-    fetchNotes();
+  };
+  useEffect(() => {
+    refreshNotes();
   },[])
 
   return (
@@ -41,7 +43,7 @@ const HomePage = () => {
         {!isLoading && notes.length > 0 && (
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4'>
             {notes.map((note) => (
-              <NoteCard key={note._id} note={note} />
+              <NoteCard key={note._id} note={note} onDelete={refreshNotes} />
             ))}
           </div>)
         }
