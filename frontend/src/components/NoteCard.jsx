@@ -5,33 +5,13 @@ import React from 'react'
 import api from '../lib/axios.js'
 import toast from 'react-hot-toast'
 import { rateLimitError } from '../lib/utility.js'
+import { handleNoteDelete } from '../lib/utility.js'
 
 const NoteCard = ({note, onDelete}) => {
     const handleDelete = async (e, id) => {
         e.preventDefault();
-        
-        if (!window.confirm("Are you sure you want to delete this note?")){
-            return;
-        }
-        try{
-            const res = await api.delete(`/notes/${id}`);
-            if (res.status === 200){
-                toast.success("Note deleted successfully");
-                onDelete(); // Refresh notes on parent component
-            }
-        } catch(error){
-            if (error.response?.status === 429) {
-                rateLimitError();
-                return;
-            }
-            else if (error.response?.status === 404){
-                toast.error("Note not found. It might have been already deleted.");
-                onDelete(); // Refresh notes on parent component
-                return;
-            }
-            toast.error("Failed to delete note. Please try again later.");
-            console.error("Delete note error: ", error);
-        }
+        await handleNoteDelete(e, id);
+        onDelete(); // Refresh notes on parent component
     }
   return (
     <Link to={`/note/${note._id}`} 
