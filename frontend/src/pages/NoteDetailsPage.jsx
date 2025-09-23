@@ -20,7 +20,33 @@ const NoteDetailsPage = () => {
     setIsDeleting(false);
     navigate("/");
   };
-  const handleSave = async (e) => {};
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (!note.title.trim() || !note.body.trim()) {
+      toast.error("Title and Body are required");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const res = await api.put(`/notes/${note._id}`, { title: note.title.trim(), body: note.body.trim() });
+      if (res.status === 200) {
+        toast.success("Note updated successfully");
+      }
+    } catch (error) {
+      if (error.response?.status === 429) {
+        rateLimitError();
+        return;
+      }
+      else if (error.response?.status === 404) {
+        toast.error("Note not found. It might have been deleted.");
+        navigate("/");
+        return;
+      }
+      toast.error("Failed to update note. Please try again later.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
   const { id } = useParams();
   const fetchNoteDetails = async () => {
     setNote(null);

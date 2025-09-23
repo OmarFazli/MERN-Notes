@@ -1,9 +1,10 @@
 import toast from 'react-hot-toast';
 import api from './axios.js';
 
+const userLocale = navigator.language || 'fr-FR';
 const formatDateTime = (datetime) => {
-    const time = datetime.toLocaleTimeString('en-CA', { hour: 'numeric', minute: '2-digit', hour12: true });
-    const date = datetime.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    const time = datetime.toLocaleTimeString(userLocale, { hour: 'numeric', minute: '2-digit', hour12: true });
+    const date = datetime.toLocaleDateString(userLocale, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
     return `${time} · ${date}`;
 }
 
@@ -35,6 +36,11 @@ const handleNoteDelete = async (e, id) => {
         console.error("Delete note error: ", error);
     }
 };
+
+const handleNoteUpdate = async (e, id, title, body) => {
+    e.preventDefault();
+    // do note update here
+}
 
 export {formatDateTime};
 export {rateLimitError};
